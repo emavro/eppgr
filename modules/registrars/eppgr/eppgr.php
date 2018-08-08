@@ -397,6 +397,9 @@ function eppgr_TransferDomain($params) {
 	eppgr_getDB($params);
 	$params['eppgrtranscheck01'] = eppgr_getRandomPassword();
 	$z = eppgr_getAESObject($params);
+	if (!is_object($z)) {
+		return 0;
+	}
 	$z->AESEncode($params['eppgrtranscheck01']);
 	$params['eppgrtranscheck02'] = $z->cipher;
 	$params['regperiod'] = 2;
@@ -984,6 +987,9 @@ function eppgr_GetEPPCode($params) {
 			$data['record'] = 'dname';
 			$dtext = serialize($data);
 			$z = eppgr_getAESObject($params);
+			if (!is_object($z)) {
+				return 0;
+			}
 			$z->AESEncode($dtext);
 			$product = 'eppgrHomograph';
 			eppgr_placeOrder($params, $postfields, $z->cipher, $product, $data, $ret['exDate']);
@@ -1832,6 +1838,9 @@ function eppgr_updateDomain(&$params, &$data) {
 						trim($savecontact['loc']['org']) != trim($cc[$u]['loc']['org']))) {
 						$dtext = serialize($savecontact);
 						$z = eppgr_getAESObject($params);
+						if (!is_object($z)) {
+							return 0;
+						}
 						$z->AESEncode($dtext);
 						$product = 'eppgr'.ucfirst($_REQUEST['contactchange']);
 						eppgr_placeOrder($params, $postfields, $z->cipher, $product);
@@ -2257,6 +2266,9 @@ function eppgr_infoDomainAfter(&$params, &$data, &$ret) {
 	$transfer = false;
 	if (array_key_exists('eppgrtranscheck01', $params) and $params['eppgrtranscheck01']) {
 		$z = eppgr_getAESObject($params);
+		if (!is_object($z)) {
+			return 0;
+		}
 		$z->AESEncode($params['eppgrtranscheck01']);
 		if (array_key_exists('eppgrtranscheck02', $params) and $params['eppgrtranscheck02'] and $params['eppgrtranscheck02'] == $z->cipher) {
 			$transfer = true;
@@ -2880,6 +2892,9 @@ function eppgr_checkDB(&$params) {
 	if (!isset($eppgrDBChecked) or $eppgrDBChecked != 1){
 		require_once realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'eppgr.aes.php');
 		$z = eppgr_getAESObject($params);
+		if (!is_object($z)) {
+			return 0;
+		}
 
 		$params['EPPHost'] = 'https://regepp.ics.forth.gr:700/epp/proxy';
 		$params['PlainWHOIS'] = 'https://grwhois.ics.forth.gr:800/plainwhois/plainWhois?domainName=';
@@ -2960,7 +2975,7 @@ function eppgr_checkDB(&$params) {
 					.") ENGINE=MyISAM  DEFAULT CHARSET=".$charset." COLLATE=".$charset."_general_ci;";
 			try {$stmt = $eppgrdb->query($query);}
 			catch(PDOException $ex) {die('MySQL error eppgr#34!');}
-			$fields = array('username', 'password', 'url', 'contactid', 'CronPassword', 'RenewDNames',
+			$fields = array('username', 'password', 'url', 'contactid', 'CronPassword', 'RenewDNames', 'ClientPrefix',
 					'AllowDeleteDomain', 'AllowDeleteHomographs', 'DisplayWhoisInfo', 'DeleteAlienContacts',
 					'EarlyExpiration', 'CheckForExpiredTransfers', 'ExtendExpiration', 'charset', 'CopyAdminToTech',
 					'CopyAdminToBill', 'WHOISExtraDomains', 'WHOISOnly', 'DomainCheck', 'IDProtectAll', 'Discounts',
@@ -2986,6 +3001,9 @@ function eppgr_checkDB(&$params) {
 			$dbl = array();
 			for ($i = 0; $i < count($fields); $i++) {
 				$z->AESEncode($params[$fields[$i]]);
+				if ($fields[$i] == 'CronPassword') {
+					$z->cipher = $params[$fields[$i]];
+				}
 				$fff[] = $z->cipher;
 				$dbl[] = $fields[$i] . " = '" . $z->cipher . "'";
 				if ($z->cipher != $dbconfig[$fields[$i]]) {

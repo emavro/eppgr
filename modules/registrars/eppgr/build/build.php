@@ -201,9 +201,17 @@ function getConfig() {
 	unset($config['id']);
 	if (!is_array($config)) die('No config found!');
 	$z = eppgr_getAESObject($config);
+	if (!is_object($z)) {
+		return 0;
+	}
 	foreach ($config as $k => $v) {
 		$z->AESDecode($config[$k]);
-		$config[$k] = $z->cipher;
+		if ($k == 'CronPassword') {
+			$config[$k] = $v;
+		}
+		else {
+			$config[$k] = $z->cipher;
+		}
 	}
 	$config['certfile'] = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'cacert.pem';
 

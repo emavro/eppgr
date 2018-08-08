@@ -48,6 +48,9 @@ class eppgr {
 		$this->data = $data;
 		if (!is_object($this->z)) {
 			$this->z = eppgr_getAESObject($params);
+			if (!is_object($this->z)) {
+				return 0;
+			}
 		}
 		$this->myFile = realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'eppgr.debug.txt';
 	}
