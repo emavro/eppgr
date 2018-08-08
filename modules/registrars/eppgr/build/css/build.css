@@ -1,0 +1,59 @@
+body {
+	width: 100%;
+	text-align: center;
+}
+
+input {
+	margin-bottom: 10px;
+}
+
+#build_wrapper {
+	width: 800px;
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#build_center, #build_info {
+	float:left;
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+#build_total, #build_messages {
+	float:left;
+	width: 100%;
+}
+
+.build_cell {
+	height: 20px;
+	float: left;
+}
+
+#contacts_info {
+	width: 100%;
+}
+
+#contacts_info table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#contacts_info table th {
+	text-align: center;
+	vertical-align: middle;
+	background-color: royalblue;
+	color: white;
+	padding: 5px;
+}
+
+#contacts_info table td {
+	text-align: center;
+	vertical-align: top;
+	padding: 5px;
+	border: thin solid royalblue;
+}
+
+#contacts_info table td.mytd1 {
+	background-color: lightgrey;
+}
