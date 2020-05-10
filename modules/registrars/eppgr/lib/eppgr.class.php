@@ -972,7 +972,7 @@ Content-Length: $l
 HEADERS;
 		if ($this->cookie) {
 			$parts = explode('Pragma', $headers);
-			$parts[0] .= "Cookie: JSESSIONID=".$this->cookie."; Path=".$this->cookiepath."; Secure\n";
+			$parts[0] .= "Cookie: JSESSIONID=".$this->cookie."; Path=".$this->cookiepath."; Secure; HttpOnly; SameSite=Strict\n";
 			$headers = implode('Pragma', $parts);
 		}
 		$data = $headers . "\n\n" . $data;
