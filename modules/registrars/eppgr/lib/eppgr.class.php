@@ -975,7 +975,7 @@ HEADERS;
 		if ($this->cookie) {
 			$headers = preg_replace('/Cookie: /', "Cookie: JSESSIONID=".$this->cookie."; ", $headers);
 		}
-		$data = $headers . "\n\n" . $data;
+		$data = $headers . "\r\n\r\n" . $data;
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_HEADER, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
