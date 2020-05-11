@@ -966,14 +966,13 @@ XML;
 GET $rest HTTP/1.1
 Host: $host
 User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)
+Cookie: Path=/epp; Secure; HttpOnly; SameSite=Strict
 Pragma: nocache
 Content-Type: application/epp+xml;charset=UTF-8
 Content-Length: $l
 HEADERS;
 		if ($this->cookie) {
-			$parts = explode('Pragma', $headers);
-			$parts[0] .= "Cookie: JSESSIONID=".$this->cookie."; Path=".$this->cookiepath."; Secure; HttpOnly; SameSite=Strict\n";
-			$headers = implode('Pragma', $parts);
+			$headers = preg_replace('/Cookie: /', "Cookie: JSESSIONID=".$this->cookie."; ", $headers);
 		}
 		$data = $headers . "\n\n" . $data;
 		$ch = curl_init();
