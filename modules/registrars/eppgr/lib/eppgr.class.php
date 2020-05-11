@@ -971,6 +971,7 @@ Pragma: nocache
 Content-Type: application/epp+xml;charset=UTF-8
 Content-Length: $l
 HEADERS;
+		$headers = preg_replace('/\r*\n/', "\r\n", $headers); 
 		if ($this->cookie) {
 			$headers = preg_replace('/Cookie: /', "Cookie: JSESSIONID=".$this->cookie."; ", $headers);
 		}
